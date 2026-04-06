@@ -192,7 +192,7 @@ while True:
         if buscar_montadora_por_codigo(codigoMontadora) is not None:
             print("\nJá existe uma montadora cadastrada com este código.")
         else:
-            estado = input("Digite a sigla do estado: ")
+            estado = input("Digite a sigla do estado: ") [:2]
             razaoSocial = input("Digite a razão social: ")
 
             nova_montadora = Montadora(codigoMontadora, estado, razaoSocial)
@@ -209,19 +209,19 @@ while True:
         print("\nLista de montadoras cadastradas:")
         for a in lista_montadoras:
             print(
-                f"Código: {a.getCodigoMontadora():<3} | Estado: {a.getEstado():<2} | Razão Social: {a.getRazaoSocial()}")
+                f"Código: {a.getCodigoMontadora():<3} | Estado: {a.getEstado()} | Razão Social: {a.getRazaoSocial()}")
 
     elif opcao == '5':
         print("\nLista de modelos cadastrados:")
         for o in lista_modelos:
             print(
-                f"Código: {o.getCodigoModelo():<3} | Nome: {o.getNome()} | Montadora: {o.getMontadoraModelo()}")
+                f"Código: {o.getCodigoModelo():<3} | Nome: {o.getNome()} | Montadora: {o.montadoraModelo.getRazaoSocial()}")
 
     elif opcao == '6':
         print("\nLista de carros cadastrados:")
         for p in lista_carros:
             print(
-                f"Placa: {p.getPlaca():<7} | Modelo: {p.getModeloCarro()} | Ano de fabricação: {p.getAnoFabricacao():<4}")
+                f"Placa: {p.getPlaca():<7} | Modelo: {p.modeloCarro.getNome()} | Ano de fabricação: {p.getAnoFabricacao():<4}")
 
     elif opcao == '7':
         print("\nSaindo do sistema. Até logo!")
