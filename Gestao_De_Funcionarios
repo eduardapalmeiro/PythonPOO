@@ -1,0 +1,281 @@
+class Funcionario():
+    def __init__(self, nome, cpf, salario, departamento):
+        self.nome = str(nome)
+        self.cpf = str(cpf)
+        self.salario = float(salario)
+        self.departamento = str(departamento)
+
+    def bonificar(self):
+        self.salario = self.salario + (self.salario / 10)
+         
+        
+
+class Gerente(Funcionario):
+    def __init__(self, nome, cpf, salario, departamento, senha, funcionariosGerenciados): 
+        super().__init__(nome, cpf, salario, departamento)  
+        self.senha = str(senha) 
+        self.funcionariosGerenciados = int(funcionariosGerenciados)
+
+    def autenticarSenha(self, senha):
+        if self.senha == senha:
+            return True
+        return False
+
+    def bonificar(self):
+        self.salario = self.salario + (self.salario / 15)
+
+class Vendedor(Funcionario):
+    def __init__(self, nome, cpf, salario, departamento, quantidadeVendas, comissao): 
+        super().__init__(nome, cpf, salario, departamento)  
+        self.quantidadaeVendas = int(quantidadeVendas) 
+        self.comissao = float(comissao)
+
+    def atualizaQuantidadeVendas(self, quantidadeVendas):
+        self.quantidadaeVendas += quantidadeVendas
+
+    def calculaSalario(self):
+        self.salario += self.quantidadaeVendas + self.comissao
+
+f1 = Funcionario('João', '32165498710', 1700.00, 'Vendas')  
+g1 = Gerente('Giovana', '12345678901', 2651.00, 'Comercial', 'admin2026', 10)
+v1 = Vendedor('Carolina', '98765432120', 2200.00, 'Vendas', 365, 10)
+
+lista_funcionarios = [f1]
+lista_gerentes = [g1]
+lista_vendedores = [v1]
+lista_geral = [lista_funcionarios, lista_gerentes, lista_vendedores]
+
+def buscar_cargo_por_cpf(cpf, lista_geral):
+    for l in lista_geral:
+        for f in l:
+            if f.cpf == cpf:
+                return True
+    return False
+
+def cadastrar_funcionario():
+    print('\nCadastrar novo funcionário: ')
+    cpf = input('\nDigite o CPF do funcionário: ')
+    if buscar_cargo_por_cpf(cpf, lista_geral):
+        print('\nEsse CPF ja foi cadastrado.')
+    else:
+        novoNome = input('\nDigite o nome do funcionário: ')
+        novoSalario = float(input('\nDigite o salário do funcionário: '))
+        novoDepartamento = input('\nDigite o departamento do funcionário: ')
+
+        novo_funcionario = Funcionario(novoNome, cpf, novoSalario, novoDepartamento)
+        lista_funcionarios.append(novo_funcionario)
+        print("\nFuncionário cadastrado com sucesso!")
+
+def cadastrar_gerente():
+    print('\nCadastrar novo gerente: ')
+    cpf = input('\nDigite o CPF do gerente: ')
+    if buscar_cargo_por_cpf(cpf, lista_geral):
+        print('\nEsse CPF ja foi cadastrado.')
+    else:
+        novoNome = input('\nDigite o nome do gerente: ')
+        novoSalario = float(input('\nDigite o salário do gerente: '))
+        novoDepartamento = input('\nDigite o departamento do gerente: ')
+        novaSenha = input('\nDigite a senha: ')
+        novoFunGer = input('\nDigite a quantidade de funcionários gerenciados: ')
+
+        novo_gerente = Gerente(novoNome, cpf, novoSalario, novoDepartamento, novaSenha, novoFunGer)
+        lista_gerentes.append(novo_gerente)
+        print("\nGerente cadastrado com sucesso!")
+
+def cadastrar_vendedor():
+    print('\nCadastrar novo vendedor: ')
+    cpf = input('\nDigite o CPF do vendedor: ')
+    if buscar_cargo_por_cpf(cpf, lista_geral):
+        print('\nEsse CPF ja foi cadastrado.')
+    else:
+        novoNome = input('\nDigite o nome do vendedor: ')
+        novoSalario = float(input('\nDigite o salário do vendedor: '))
+        novoDepartamento = input('\nDigite o departamento do vendedor: ')
+        novaQuaVen = int(input('\nDigite a quantidade de vendas do vendedor: '))
+        novaComissao = float(input('\nDigite a comissão do vendedor: '))
+
+        novo_vendedor = Vendedor(novoNome, cpf, novoSalario, novoDepartamento, novaQuaVen, novaComissao)
+        lista_vendedores.append(novo_vendedor)
+        print("\nVendedor cadastrado com sucesso!")
+
+def bonificar_funcionario():
+    if not lista_funcionarios:
+        print('\nNenhum funcionário cadastrado.')
+        return
+    print('\nLista de Funcionários:')
+    for i, f in enumerate(lista_funcionarios):
+        print(f'{i + 1} - {f.nome} | CPF: {f.cpf} | Salário: R$ {f.salario:.2f}')
+    cpf = input('\nDigite o CPF do funcionário a bonificar: ')
+    for f in lista_funcionarios:
+        if f.cpf == cpf:
+            f.bonificar()
+            print(f'\nBonus aplicado! Novo salário de {f.nome}: R$ {f.salario:.2f}')
+            return
+    print('\nFuncionário não encontrado.')
+
+def bonificar_gerente():
+    if not lista_gerentes:
+        print('\nNenhum gerente cadastrado.')
+        return
+    print('\nLista de Gerentes:')
+    for i, g in enumerate(lista_gerentes):
+        print(f'{i + 1} - {g.nome} | CPF: {g.cpf} | Salário: R$ {g.salario:.2f}')
+    cpf = input('\nDigite o CPF do gerente a bonificar: ')
+    for g in lista_gerentes:
+        if g.cpf == cpf:
+            g.bonificar()
+            print(f'\nBonus aplicado! Novo salário de {g.nome}: R$ {g.salario:.2f}')
+            return
+    print('\nGerente não encontrado.')
+
+def autenticar_senha_gerente():
+    if not lista_gerentes:
+        print('\nNenhum gerente cadastrado.')
+        return
+    print('\nLista de Gerentes:')
+    for i, g in enumerate(lista_gerentes):
+        print(f'{i + 1} - {g.nome} | CPF: {g.cpf}')
+    cpf = input('\nDigite o CPF do gerente: ')
+    for g in lista_gerentes:
+        if g.cpf == cpf:
+            senha = input(f'\nDigite a senha do gerente {g.nome}: ')
+            if g.autenticarSenha(senha):
+                print('\nSenha autenticada com sucesso!')
+            else:
+                print('\nSenha incorreta.')
+            return
+    print('\nGerente não encontrado.')
+
+def atualizar_vendas_vendedor():
+    if not lista_vendedores:
+        print('\nNenhum vendedor cadastrado.')
+        return
+    print('\nLista de Vendedores:')
+    for i, v in enumerate(lista_vendedores):
+        print(f'{i + 1} - {v.nome} | CPF: {v.cpf} | Vendas: {v.quantidadaeVendas}')
+    cpf = input('\nDigite o CPF do vendedor: ')
+    for v in lista_vendedores:
+        if v.cpf == cpf:
+            qtd = int(input('\nDigite a quantidade de vendas a adicionar: '))
+            v.atualizaQuantidadeVendas(qtd)
+            print(f'\nQuantidade de vendas atualizada! Total de vendas de {v.nome}: {v.quantidadaeVendas}')
+            return
+    print('\nVendedor não encontrado.')
+
+def calcular_salario_vendedor():
+    if not lista_vendedores:
+        print('\nNenhum vendedor cadastrado.')
+        return
+    print('\nLista de Vendedores:')
+    for i, v in enumerate(lista_vendedores):
+        print(f'{i + 1} - {v.nome} | CPF: {v.cpf} | Salário: R$ {v.salario:.2f}')
+    cpf = input('\nDigite o CPF do vendedor: ')
+    for v in lista_vendedores:
+        if v.cpf == cpf:
+            v.calculaSalario()
+            print(f'\nSalário calculado! Novo salário de {v.nome}: R$ {v.salario:.2f}')
+            return
+    print('\nVendedor não encontrado.')
+
+def listar_funcionarios():
+    if not lista_funcionarios:
+        print('\nNenhum funcionário cadastrado.')
+        return
+    nome = input('\nDigite o nome do funcionário (ou deixe em branco para listar todos): ')
+    print('\n--- Lista de Funcionários ---')
+    encontrou = False
+    for f in lista_funcionarios:
+        if nome == '' or nome.lower() in f.nome.lower():
+            print(f'Nome: {f.nome} | CPF: {f.cpf} | Salário: R$ {f.salario:.2f} | Departamento: {f.departamento}')
+            encontrou = True
+    if not encontrou:
+        print('Nenhum funcionário encontrado com esse nome.')
+
+def listar_gerentes():
+    if not lista_gerentes:
+        print('\nNenhum gerente cadastrado.')
+        return
+    nome = input('\nDigite o nome do gerente (ou deixe em branco para listar todos): ')
+    print('\n--- Lista de Gerentes ---')
+    encontrou = False
+    for g in lista_gerentes:
+        if nome == '' or nome.lower() in g.nome.lower():
+            print(f'Nome: {g.nome} | CPF: {g.cpf} | Salário: R$ {g.salario:.2f} | Departamento: {g.departamento} | Funcionários Gerenciados: {g.funcionariosGerenciados}')
+            encontrou = True
+    if not encontrou:
+        print('Nenhum gerente encontrado com esse nome.')
+
+def listar_vendedores():
+    if not lista_vendedores:
+        print('\nNenhum vendedor cadastrado.')
+        return
+    nome = input('\nDigite o nome do vendedor (ou deixe em branco para listar todos): ')
+    print('\n--- Lista de Vendedores ---')
+    encontrou = False
+    for v in lista_vendedores:
+        if nome == '' or nome.lower() in v.nome.lower():
+            print(f'Nome: {v.nome} | CPF: {v.cpf} | Salário: R$ {v.salario:.2f} | Departamento: {v.departamento} | Vendas: {v.quantidadaeVendas} | Comissão: R$ {v.comissao:.2f}')
+            encontrou = True
+    if not encontrou:
+        print('Nenhum vendedor encontrado com esse nome.')
+
+
+while True:
+    print("***********************************")
+    print("SISTEMA DE GESTÃO DE FUNCIONÁRIOS")
+    print("***********************************")
+    print("1 - Cadastrar Funcionário")
+    print("2 - Cadastrar Gerente")
+    print("3 - Cadastrar Vendedor")
+    print("4 - Bonificar Funcionário")
+    print("5 - Bonificar Gerente")
+    print("6 - Autenticar senha Gerente")
+    print("7 - Atualizar quantidade de vendas do vendedor")
+    print("8 - Calcular Salário do Vendedor")
+    print("9 - Listar Funcionários")
+    print("10 - Listar Gerentes")
+    print("11 - Listar Vendedores")
+    print("12 - Sair")
+    print("***********************************")
+
+    opcao = input("Escolha uma opção (1 a 12): ")
+
+    if opcao == '1':
+        cadastrar_funcionario()
+
+    elif opcao == '2':
+        cadastrar_gerente()
+
+    elif opcao == '3':
+        cadastrar_vendedor()
+
+    elif opcao == '4':
+        bonificar_funcionario()
+
+    elif opcao == '5':
+        bonificar_gerente()
+
+    elif opcao == '6':
+        autenticar_senha_gerente()
+
+    elif opcao == '7':
+        atualizar_vendas_vendedor()
+
+    elif opcao == '8':
+        calcular_salario_vendedor()
+
+    elif opcao == '9':
+        listar_funcionarios()
+
+    elif opcao == '10':
+        listar_gerentes()
+
+    elif opcao == '11':
+        listar_vendedores()
+
+    elif opcao == '12':
+        print("\nSaindo do sistema. Até logo!")
+        break
+
+    else:
+        print("\nOpção inválida. Tente novamente.")
